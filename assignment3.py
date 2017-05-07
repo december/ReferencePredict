@@ -105,6 +105,7 @@ for k in referdic:
 
 print 'Calculating times finished.'
 
+'''
 alllist = list()
 alllist.append(iddic)
 alllist.append(referdic)
@@ -119,6 +120,7 @@ alllist.append(referreddic)
 fw = file('dumpfile', 'w')
 cPickle.dump(alllist, fw)
 fw.close()
+'''
 
 for k in featuredic:
 	featuredic[k].append(timesdic[k])
@@ -145,7 +147,7 @@ for k in featuredic:
 		s = s * 1.0 / len(paperdic[k])
 	featuredic[k].append(s)
 	featuredic[k].append(str(max(newdic.items(), key=lambda x: x[1])[0]))
-	featuredic[k].append(timesdic[max(coauhordic.items(), key=lambda x: x[1])[0]])
+	featuredic[k].append(timesdic[max(coauthordic.items(), key=lambda x: x[1])[0]])
 	featuredic[k].append(timesdic[max(referingdic[k].items(), key=lambda x: x[1])[0]])
 	featuredic[k].append(timesdic[max(referreddic[k].items(), key=lambda x: x[1])[0]])
 
