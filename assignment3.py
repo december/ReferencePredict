@@ -130,11 +130,12 @@ for k in featuredic:
 	for item in paperdic[k]:
 		s += yeardic[item]
 
-		order = publicdic[item]
-		if newdic.has_key(order):
-			newdic[order] += 1
-		else:
-			newdic[order] = 1
+		if publicdic.has_key(item):
+			order = publicdic[item]
+			if newdic.has_key(order):
+				newdic[order] += 1
+			else:
+				newdic[order] = 1
 
 		for name in authordic[item]:
 			if name != k:
@@ -146,7 +147,10 @@ for k in featuredic:
 	if len(paperdic[k]) > 0:
 		s = s * 1.0 / len(paperdic[k])
 	featuredic[k].append(s)
-	featuredic[k].append(str(max(newdic.items(), key=lambda x: x[1])[0]))
+	if len(newdic) != 0:
+		featuredic[k].append(str(max(newdic.items(), key=lambda x: x[1])[0]))
+	else:
+		featuredic[k].append('None')
 	if len(coauthordic) != 0:
 		featuredic[k].append(timesdic[max(coauthordic.items(), key=lambda x: x[1])[0]])
 	else:
