@@ -147,15 +147,18 @@ for k in featuredic:
 		s = s * 1.0 / len(paperdic[k])
 	featuredic[k].append(s)
 	featuredic[k].append(str(max(newdic.items(), key=lambda x: x[1])[0]))
-	featuredic[k].append(timesdic[max(coauthordic.items(), key=lambda x: x[1])[0]])
+	if len(coauthordic) != 0:
+		featuredic[k].append(timesdic[max(coauthordic.items(), key=lambda x: x[1])[0]])
+	else:
+		featuredic[k].append(-1)
 	if referingdic.has_key(k):
 		featuredic[k].append(timesdic[max(referingdic[k].items(), key=lambda x: x[1])[0]])
 	else:
-		featuredic[k].append(0)
+		featuredic[k].append(-1)
 	if referreddic.has_key(k):
 		featuredic[k].append(timesdic[max(referreddic[k].items(), key=lambda x: x[1])[0]])
 	else:
-		featuredic[k].append(0)
+		featuredic[k].append(-1)
 
 print 'Making feature finished.'
 
