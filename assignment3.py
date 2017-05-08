@@ -325,7 +325,7 @@ print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
 #clf = sklearn.linear_model.LinearRegression()
-clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3, max_iter=20)
+clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3, max_iter=100)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
