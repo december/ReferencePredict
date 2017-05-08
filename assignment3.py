@@ -109,10 +109,12 @@ for k in referdic:
 							referreddic[name][unit] = 1
 			item += '!'
 
-templist = list()
+tempdic = {}
 for k in paperdic:
-	templist.append(len(paperdic))
-print max(templist)
+	tempdic[k] = len(paperdic[k])
+templist = sorted(tempdic.iteritems(), key=lambda d:d[1], reverse=True)
+for i in range(10):
+	print templist[i]
 
 print 'Calculating times finished.'
 
@@ -322,7 +324,7 @@ print max(ltrain)
 print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
-clf = sklearn.linear_model.LogisticRegression()
+clf = sklearn.linear_model.LinearRegression()
 #clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3, max_iter=100)
 clf.fit(ftrain, ltrain)
 
