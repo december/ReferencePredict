@@ -129,11 +129,10 @@ fw.close()
 
 for k in featuredic:
 	featuredic[k].append(timesdic[k])
-	s = 0
 	newdic = {} #conference name to public times
 	coauthordic = {} #author name to coauthor times
+	temp = [0, 0, 0, 0, 0]
 	for item in paperdic[k]:
-		s += yeardic[item]
 
 		if publicdic.has_key(item):
 			order = publicdic[item]
@@ -149,9 +148,27 @@ for k in featuredic:
 				else:
 					coauthordic[name] = 1
 
-	if len(paperdic[k]) > 0:
-		s = s * 1.0 / len(paperdic[k])
-	featuredic[k].append(s)
+		if yeardic[item] >= 40:
+			temp[0] += 1
+			continue
+		if yeardic[item] >= 30:
+			temp[1] += 1
+			continue
+		if yeardic[item] >= 20:
+			temp[2] += 1
+			continue
+		if yeardic[item] >= 10:
+			temp[3] += 1
+			continue
+		temp[4] += 1
+		
+	#if len(paperdic[k]) > 0:
+	#	s = s * 1.0 / len(paperdic[k])
+	#featuredic[k].append(s)
+	s = sum(temp)
+	if s > 0:
+		temp = [p * 1.0 / s for p in temp]
+	featuredic[k].extend(temp)
 	featuredic[k].append(len(paperdic[k]))
 
 	temp = [0, 0, 0, 0]
