@@ -1,5 +1,6 @@
 import sklearn.linear_model
 import sklearn.neural_network
+import sklearn.svm
 import cPickle
 import numpy as np
 
@@ -324,8 +325,9 @@ print max(ltrain)
 print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
+clf = sklearn.svm.SVC()
 #clf = sklearn.linear_model.LinearRegression()
-clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3, max_iter=100)
+#clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3, max_iter=100)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
