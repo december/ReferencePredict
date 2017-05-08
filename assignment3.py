@@ -331,7 +331,7 @@ print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
 #clf = sklearn.linear_model.LogisticRegression()
-clf = sklearn.neural_network.MLPRegressor()
+clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
