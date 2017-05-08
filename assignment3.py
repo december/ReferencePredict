@@ -1,4 +1,5 @@
 import sklearn.linear_model
+import sklearn.neural_network
 import cPickle
 import numpy as np
 
@@ -148,13 +149,13 @@ for k in featuredic:
 				else:
 					coauthordic[name] = 1
 
-		if yeardic[item] >= 40:
+		if yeardic[item] >= 30:
 			temp[0] += 1
 			continue
-		if yeardic[item] >= 30:
+		if yeardic[item] >= 20:
 			temp[1] += 1
 			continue
-		if yeardic[item] >= 20:
+		if yeardic[item] >= 15:
 			temp[2] += 1
 			continue
 		if yeardic[item] >= 10:
@@ -329,7 +330,8 @@ print max(ltrain)
 print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
-clf = sklearn.linear_model.LogisticRegression()
+#clf = sklearn.linear_model.LogisticRegression()
+clf = sklearn.neural_network.MLPRegressor()
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
