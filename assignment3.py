@@ -109,6 +109,11 @@ for k in referdic:
 							referreddic[name][unit] = 1
 			item += '!'
 
+templist = list()
+for k in paperdic:
+	templist.append(len(paperdic))
+print max(templist)
+
 print 'Calculating times finished.'
 
 '''
@@ -128,6 +133,7 @@ cPickle.dump(alllist, fw)
 fw.close()
 '''
 
+binnum = 10
 for k in featuredic:
 	featuredic[k].append(timesdic[k])
 	newdic = {} #conference name to public times
@@ -172,21 +178,21 @@ for k in featuredic:
 	featuredic[k].extend(temp)
 	featuredic[k].append(len(paperdic[k]))
 
-	temp = [0, 0, 0, 0]
+	temp = list()
+	for i in range(binnum):
+		temp.append(0)
+	binsize = [5, 10, 20, 50, 100, 200, 300, 500, 1000]
+	papersize = [3, 7, 12, 20, 30, 50, 70, 100, 150]
 	for item in paperdic[k]:
 		if not influencedic.has_key(item):
 			temp[0] += 1
 			continue
-		if influencedic[item] <= 10:
-			temp[0] += 1
-			continue
-		if influencedic[item] <= 100:
-			temp[1] += 1
-			continue
-		if influencedic[item] <= 1000:
-			temp[2] += 1
-			continue
-		temp[3] += 1
+		for i in range(binnum-1):
+			if influencedic[item] <= binsize[i]:
+				temp[i] += 1
+				break
+		if influencedic[item] > binsize[-1]:
+			temp[binnum-1] += 1
 	s = sum(temp)
 	if s > 0:
 		temp = [p * 1.0 / s for p in temp]
@@ -198,31 +204,26 @@ for k in featuredic:
 		featuredic[k].append(-1)
 
 	featuredic[k].append(len(coauthordic))
-	temp1 = [0, 0, 0, 0]
-	temp2 = [0, 0, 0, 0]
+	temp1 = list()
+	temp2 = list()
+	for i in range(binnum):
+		temp1.append(0)
+		temp2.append(0)
 	if len(coauthordic) != 0:
 		for item in coauthordic:
-			if timesdic[item] <= 10:
-				temp1[0] += coauthordic[item]
-				continue
-			if timesdic[item] <= 100:
-				temp1[1] += coauthordic[item]
-				continue
-			if timesdic[item] <= 1000:
-				temp1[2] += coauthordic[item]
-				continue
-			temp1[3] += coauthordic[item]
+			for i in range(binnum-1):
+				if timesdic[item] <= binsize[i]:
+					temp1[i] += coauthordic[item]
+					break
+			if timesdic[item] > binsize[-1]:
+				temp1[binnum-1] += coauthordic[item]
 		for item in coauthordic:
-			if len(paperdic[item]) <= 10:
-				temp2[0] += coauthordic[item]
-				continue
-			if len(paperdic[item]) <= 20:
-				temp2[1] += coauthordic[item]
-				continue
-			if timesdic[item] <= 50:
-				temp2[2] += coauthordic[item]
-				continue
-			temp2[3] += coauthordic[item]
+			for i in range(binnum-1):
+				if len(paperdic[item]) <= papersize[i]:
+					temp2[i] += coauthordic[item]
+					break
+			if len(paperdic[item]) > papersize[-1]:
+				temp2[binnum-1] += coauthordic[item]
 	s = sum(temp1)
 	if s > 0:
 		temp1 = [p * 1.0 / s for p in temp1]
@@ -235,34 +236,31 @@ for k in featuredic:
 	#else:
 	#	featuredic[k].append(-1)
 
-	temp1 = [0, 0, 0, 0]
-	temp2 = [0, 0, 0, 0]
+	temp1 = list()
+	temp2 = list()
+	for i in range(binnum):
+		temp1.append(0)
+		temp2.append(0)
 	if referingdic.has_key(k):
 		referingtimes = 0
 		for item in referingdic[k]:
 			referingtimes += referingdic[k][item]
-			if timesdic[item] <= 10:
-				temp1[0] += referingdic[k][item]
-				continue
-			if timesdic[item] <= 100:
-				temp1[1] += referingdic[k][item]
-				continue
-			if timesdic[item] <= 1000:
-				temp1[2] += referingdic[k][item]
-				continue
-			temp1[3] += referingdic[k][item]
+			for i in range(binnum-1):
+				if timesdic[item] <= binsize[i]:
+					temp1[i] += referingdic[k][item]
+					break
+			if timesdic[item] > binsize[-1]:
+				temp1[binnum-1] += referingdic[k][item]
+
 		featuredic[k].append(referingtimes)
 		for item in referingdic[k]:
-			if len(paperdic[item]) <= 10:
-				temp2[0] += referingdic[k][item]
-				continue
-			if len(paperdic[item]) <= 20:
-				temp2[1] += referingdic[k][item]
-				continue
-			if timesdic[item] <= 50:
-				temp2[2] += referingdic[k][item]
-				continue
-			temp2[3] += referingdic[k][item]
+			for i in range(binnum-1):
+				if len(paperdic[item]) <= papersize[i]:
+					temp2[i] += referingdic[k][item]
+					break
+			if len(paperdic[item]) > papersize[-1]:
+				temp2[binnum-1] += referingdic[k][item]
+
 		#featuredic[k].append(timesdic[max(referingdic[k].items(), key=lambda x: x[1])[0]])
 	else:
 		featuredic[k].append(0)
@@ -277,27 +275,21 @@ for k in featuredic:
 
 	if referreddic.has_key(k):
 		for item in referreddic[k]:
-			if timesdic[item] <= 10:
-				temp1[0] += referreddic[k][item]
-				continue
-			if timesdic[item] <= 100:
-				temp1[1] += referreddic[k][item]
-				continue
-			if timesdic[item] <= 1000:
-				temp1[2] += referreddic[k][item]
-				continue
-			temp1[3] += referreddic[k][item]
+			for i in range(binnum-1):
+				if timesdic[item] <= binsize[i]:
+					temp1[i] += referreddic[k][item]
+					break
+			if timesdic[item] > binsize[-1]:
+				temp1[binnum-1] += referreddic[k][item]
+
 		for item in referreddic[k]:
-			if len(paperdic[item]) <= 10:
-				temp2[0] += referreddic[k][item]
-				continue
-			if len(paperdic[item]) <= 20:
-				temp2[1] += referreddic[k][item]
-				continue
-			if timesdic[item] <= 50:
-				temp2[2] += referreddic[k][item]
-				continue
-			temp2[3] += referreddic[k][item]
+			for i in range(binnum-1):
+				if len(paperdic[item]) <= papersize[i]:
+					temp2[i] += referreddic[k][item]
+					break
+			if len(paperdic[item]) > papersize[-1]:
+				temp2[binnum-1] += referreddic[k][item]
+
 		#featuredic[k].append(timesdic[max(referreddic[k].items(), key=lambda x: x[1])[0]])
 	#else:
 	#	featuredic[k].append(0)
@@ -330,8 +322,8 @@ print max(ltrain)
 print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
-#clf = sklearn.linear_model.LogisticRegression()
-clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3)
+clf = sklearn.linear_model.LogisticRegression()
+#clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3, max_iter=100)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
