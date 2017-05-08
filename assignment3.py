@@ -20,6 +20,7 @@ traindic = {}
 testlist = list()
 
 timesdic = {} #author name to reference times till 2011
+influencedic = {} #paper id to its reference times till 2011
 
 fw = open('../author.txt', 'r')
 data = fw.readlines()
@@ -80,6 +81,10 @@ print 'Calculating paper finished.'
 
 for k in referdic:
 	for item in referdic[k]:
+		if influencedic.has_key(item):
+			influencedic[item] += 1
+		else:
+			influencedic[item] = 1
 		while authordic.has_key(item):
 			for name in authordic[item]:
 				if timesdic.has_key(name):
@@ -147,22 +152,145 @@ for k in featuredic:
 	if len(paperdic[k]) > 0:
 		s = s * 1.0 / len(paperdic[k])
 	featuredic[k].append(s)
+	featuredic[k].append(len(paperdic[k]))
+
+	temp = [0, 0, 0, 0]
+	for item in paperdic[k]:
+		if not influencedic.has_key(item):
+			temp[0] += 1
+			continue
+		if influencedic[item] <= 10:
+			temp[0] += 1
+			continue
+		if influencedic[item] <= 100:
+			temp[1] += 1
+			continue
+		if influencedic[item] <= 1000:
+			temp[2] += 1
+			continue
+		temp[3] += 1
+	s = sum(temp)
+	if s > 0:
+		temp = [p * 1.0 / s for p in temp]
+	featuredic[k].extend(temp)
+
 	if len(newdic) != 0:
 		featuredic[k].append(max(newdic.items(), key=lambda x: x[1])[0])
 	else:
 		featuredic[k].append(-1)
+
+	featuredic[k].append(len(coauthordic))
+	temp1 = [0, 0, 0, 0]
+	temp2 = [0, 0, 0, 0]
 	if len(coauthordic) != 0:
-		featuredic[k].append(timesdic[max(coauthordic.items(), key=lambda x: x[1])[0]])
-	else:
-		featuredic[k].append(-1)
+		for item in coauthordic:
+			if timesdic[item] <= 10:
+				temp1[0] += coauthordic[item]
+				continue
+			if timesdic[item] <= 100:
+				temp1[1] += coauthordic[item]
+				continue
+			if timesdic[item] <= 1000:
+				temp1[2] += coauthordic[item]
+				continue
+			temp1[3] += coauthordic[item]
+		for item in coauthordic:
+			if len(paperdic[item]) <= 10:
+				temp2[0] += coauthordic[item]
+				continue
+			if len(paperdic[item]) <= 20:
+				temp2[1] += coauthordic[item]
+				continue
+			if timesdic[item] <= 50:
+				temp2[2] += coauthordic[item]
+				continue
+			temp2[3] += coauthordic[item]
+	s = sum(temp1)
+	if s > 0:
+		temp1 = [p * 1.0 / s for p in temp1]
+	featuredic[k].extend(temp1)
+	s = sum(temp2)
+	if s > 0:
+		temp2 = [p * 1.0 / s for p in temp2]
+	featuredic[k].extend(temp2)
+		#featuredic[k].append(timesdic[max(coauthordic.items(), key=lambda x: x[1])[0]])
+	#else:
+	#	featuredic[k].append(-1)
+
+	temp1 = [0, 0, 0, 0]
+	temp2 = [0, 0, 0, 0]
 	if referingdic.has_key(k):
-		featuredic[k].append(timesdic[max(referingdic[k].items(), key=lambda x: x[1])[0]])
+		referingtimes = 0
+		for item in referingdic[k]:
+			referingtimes += referingdic[k][item]
+			if timesdic[item] <= 10:
+				temp1[0] += referingdic[k][item]
+				continue
+			if timesdic[item] <= 100:
+				temp1[1] += referingdic[k][item]
+				continue
+			if timesdic[item] <= 1000:
+				temp1[2] += referingdic[k][item]
+				continue
+			temp1[3] += referingdic[k][item]
+		featuredic.append(referingtimes)
+		for item in referingdic[k]:
+			if len(paperdic[item]) <= 10:
+				temp2[0] += referingdic[k][item]
+				continue
+			if len(paperdic[item]) <= 20:
+				temp2[1] += referingdic[k][item]
+				continue
+			if timesdic[item] <= 50:
+				temp2[2] += referingdic[k][item]
+				continue
+			temp2[3] += referingdic[k][item]
+		#featuredic[k].append(timesdic[max(referingdic[k].items(), key=lambda x: x[1])[0]])
 	else:
-		featuredic[k].append(-1)
+		featuredic[k].append(0)
+	s = sum(temp1)
+	if s > 0:
+		temp1 = [p * 1.0 / s for p in temp1]
+	featuredic[k].extend(temp1)
+	s = sum(temp2)
+	if s > 0:
+		temp2 = [p * 1.0 / s for p in temp2]
+	featuredic[k].extend(temp2)
+
 	if referreddic.has_key(k):
-		featuredic[k].append(timesdic[max(referreddic[k].items(), key=lambda x: x[1])[0]])
-	else:
-		featuredic[k].append(-1)
+		for item in referreddic[k]:
+			if timesdic[item] <= 10:
+				temp1[0] += referreddic[k][item]
+				continue
+			if timesdic[item] <= 100:
+				temp1[1] += referreddic[k][item]
+				continue
+			if timesdic[item] <= 1000:
+				temp1[2] += referreddic[k][item]
+				continue
+			temp1[3] += referreddic[k][item]
+		for item in referreddic[k]:
+			if len(paperdic[item]) <= 10:
+				temp2[0] += referreddic[k][item]
+				continue
+			if len(paperdic[item]) <= 20:
+				temp2[1] += referreddic[k][item]
+				continue
+			if timesdic[item] <= 50:
+				temp2[2] += referreddic[k][item]
+				continue
+			temp2[3] += referreddic[k][item]
+		#featuredic[k].append(timesdic[max(referreddic[k].items(), key=lambda x: x[1])[0]])
+	#else:
+	#	featuredic[k].append(0)
+	s = sum(temp1)
+	if s > 0:
+		temp1 = [p * 1.0 / s for p in temp1]
+	featuredic[k].extend(temp1)
+	s = sum(temp2)
+	if s > 0:
+		temp2 = [p * 1.0 / s for p in temp2]
+	featuredic[k].extend(temp2)
 
 print 'Making feature finished.'
 
@@ -182,7 +310,7 @@ for k in traindic:
 
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
-clf = sklearn.linear_model.LogisticRegression()
+clf = sklearn.linear_model.LinearRegression()
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
