@@ -147,10 +147,12 @@ for k in featuredic:
 	if len(paperdic[k]) > 0:
 		s = s * 1.0 / len(paperdic[k])
 	featuredic[k].append(s)
+	'''
 	if len(newdic) != 0:
 		featuredic[k].append(max(newdic.items(), key=lambda x: x[1])[0])
 	else:
 		featuredic[k].append(-1)
+	'''
 	if len(coauthordic) != 0:
 		featuredic[k].append(timesdic[max(coauthordic.items(), key=lambda x: x[1])[0]])
 	else:
