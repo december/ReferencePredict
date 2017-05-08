@@ -329,7 +329,7 @@ print max(ltrain)
 print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
-clf = sklearn.linear_model.LinearRegression()
+clf = sklearn.linear_model.LogisticRegression()
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
