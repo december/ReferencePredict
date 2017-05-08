@@ -184,7 +184,7 @@ for k in featuredic:
 	for i in range(binnum):
 		temp.append(0)
 	binsize = [5, 10, 20, 50, 100, 200, 300, 500, 1000]
-	papersize = [3, 7, 12, 20, 30, 50, 70, 100, 150]
+	papersize = [5, 10, 20, 50, 100, 150, 200, 300, 500]
 	for item in paperdic[k]:
 		if not influencedic.has_key(item):
 			temp[0] += 1
@@ -324,8 +324,8 @@ print max(ltrain)
 print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
-clf = sklearn.linear_model.LinearRegression()
-#clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3, max_iter=100)
+#clf = sklearn.linear_model.LinearRegression()
+clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3, max_iter=20)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
