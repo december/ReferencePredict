@@ -182,7 +182,7 @@ for k in traindic:
 
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
-clf = sklearn.linear_model.LogisticRegression()
+clf = sklearn.linear_model.LinearRegression()
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
