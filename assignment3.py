@@ -325,6 +325,8 @@ for k in traindic:
 	ftrain.append(featuredic[k])
 	ltrain.append(traindic[k])
 
+print max(ltrain)
+print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
 clf = sklearn.linear_model.LinearRegression()
@@ -346,6 +348,8 @@ for k in testlist:
 print 'Predicting finished.'
 
 ltest = clf.predict(np.array(ftest))
+print max(ltest)
+print min(ltest)
 fw = open('result.txt', 'w')
 cnt = 0
 for k in testlist:
