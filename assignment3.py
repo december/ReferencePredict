@@ -233,7 +233,7 @@ for k in featuredic:
 				temp1[2] += referingdic[k][item]
 				continue
 			temp1[3] += referingdic[k][item]
-		featuredic.append(referingtimes)
+		featuredic[k].append(referingtimes)
 		for item in referingdic[k]:
 			if len(paperdic[item]) <= 10:
 				temp2[0] += referingdic[k][item]
