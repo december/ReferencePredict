@@ -1,6 +1,7 @@
 import sklearn.linear_model
 import sklearn.neural_network
 import sklearn.svm
+import sklearn.ensemble 
 import cPickle
 import numpy as np
 
@@ -11,6 +12,7 @@ titledic = {} #paper id to paper title list
 conferencedic = {} #conference name to its order
 publicdic = {} #paper id to its conference order
 yeardic = {} #paper id to its public year
+orderdic = {} #author name to first/second/third/other order author times
 
 featuredic = {} #author name to its feature list
 paperdic = {} #author name to his/her paper id list
@@ -24,6 +26,8 @@ testlist = list()
 timesdic = {} #author name to reference times till 2011
 influencedic = {} #paper id to its reference times till 2011
 
+
+
 fw = open('../author.txt', 'r')
 data = fw.readlines()
 fw.close()
@@ -32,6 +36,7 @@ for line in data:
 	iddic[temp[1]] = temp[0]
 	timesdic[temp[1]] = 0
 	featuredic[temp[1]] = list()
+	orderdic[temp[1]] = [0, 0, 0, 0]
 
 fw = open('../paper.txt', 'r')
 data = fw.readlines()
@@ -72,6 +77,7 @@ while cnt < n:
 print 'Reading file finished.'
 
 for k in authordic:
+	cnt = 0
 	for item in authordic[k]:
 		if paperdic.has_key(item):
 			paperdic[item].append(k)
@@ -79,6 +85,11 @@ for k in authordic:
 			temp = list()
 			temp.append(k)
 			paperdic[item] = temp
+		if cnt < 3:
+			orderdic[item][cnt] += 1
+			cnt += 1
+		else:
+			orderdic[item][3] += 1
 print 'Calculating paper finished.'
 
 for k in referdic:
@@ -180,6 +191,12 @@ for k in featuredic:
 		temp = [p * 1.0 / s for p in temp]
 	featuredic[k].extend(temp)
 	featuredic[k].append(len(paperdic[k]))
+
+	temp = orderdic[k]
+	s = sum(temp)
+	if s > 0:
+		temp = [p * 1.0 / s for p in temp]
+	featuredic[k].extend(temp)
 
 	temp = list()
 	for i in range(binnum):
@@ -327,7 +344,8 @@ ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
 #clf = sklearn.svm.SVC()
 #clf = sklearn.linear_model.LinearRegression()
-clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=10)
+#clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=())
+clf = sklearn.ensemble.GradientBoostingRegressor()
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
