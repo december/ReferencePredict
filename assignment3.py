@@ -136,7 +136,7 @@ cPickle.dump(alllist, fw)
 fw.close()
 '''
 
-binnum = 10
+binnum = 11
 for k in featuredic:
 	featuredic[k].append(timesdic[k])
 	newdic = {} #conference name to public times
@@ -184,8 +184,8 @@ for k in featuredic:
 	temp = list()
 	for i in range(binnum):
 		temp.append(0)
-	binsize = [5, 10, 20, 50, 100, 200, 300, 500, 1000]
-	papersize = [5, 10, 20, 50, 100, 150, 200, 300, 500]
+	binsize = [0, 5, 10, 20, 50, 100, 200, 300, 500, 1000]
+	papersize = [0, 5, 10, 20, 50, 100, 150, 200, 300, 500]
 	for item in paperdic[k]:
 		if not influencedic.has_key(item):
 			temp[0] += 1
@@ -325,9 +325,9 @@ print max(ltrain)
 print min(ltrain)
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
-clf = sklearn.svm.SVC()
+#clf = sklearn.svm.SVC()
 #clf = sklearn.linear_model.LinearRegression()
-#clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=3, max_iter=100)
+clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=10)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
