@@ -353,7 +353,7 @@ param_grid = {'n_estimators':range(20,81,10),
               'max_depth': [4, 6,8], 
               'min_samples_leaf': [3, 5, 9, 14], 
               'max_features': [0.8,0.5,0.3, 0.1]} 
-estimator = sklearn.model_selection.GridSearchCV(clf)
+estimator = sklearn.model_selection.GridSearchCV(clf, param_grid)
 estimator.fit(ftrain, ltrain)
 clf = sklearn.ensemble.GradientBoostingRegressor(estimator.best_params_)
 clf.fit(ftrain, ltrain)
