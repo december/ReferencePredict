@@ -2,6 +2,7 @@ import sklearn.linear_model
 import sklearn.neural_network
 import sklearn.svm
 import sklearn.ensemble 
+import sklearn.model_selection
 import cPickle
 import numpy as np
 
@@ -345,8 +346,16 @@ ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
 #clf = sklearn.svm.SVC()
 #clf = sklearn.linear_model.LinearRegression()
-clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=(neuron, neuron, neuron), learning_rate='invscaling')
-#clf = sklearn.ensemble.GradientBoostingRegressor()
+#clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=(neuron, neuron, neuron), learning_rate='invscaling')
+clf = sklearn.ensemble.GradientBoostingRegressor()
+param_grid = {'n_estimators':range(20,81,10), 
+              'learning_rate': [0.2,0.1, 0.05, 0.02, 0.01 ], 
+              'max_depth': [4, 6,8], 
+              'min_samples_leaf': [3, 5, 9, 14], 
+              'max_features': [0.8,0.5,0.3, 0.1]} 
+estimator = sklearn.model_selection.GridSearchCV(clf)
+estimator.fit(ftrain, ltrain)
+clf = sklearn.ensemble.GradientBoostingRegressor(estimator.best_params_)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
