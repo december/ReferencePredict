@@ -340,12 +340,13 @@ for k in traindic:
 
 print max(ltrain)
 print min(ltrain)
+neuron = len(ftrain[0])
 ftrain = np.array(ftrain)
 ltrain = np.array(ltrain)
 #clf = sklearn.svm.SVC()
 #clf = sklearn.linear_model.LinearRegression()
-#clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=())
-clf = sklearn.ensemble.GradientBoostingRegressor()
+clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=(neuron, neuron, neuron), learning_rate='invscaling')
+#clf = sklearn.ensemble.GradientBoostingRegressor()
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
