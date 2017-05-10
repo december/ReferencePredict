@@ -158,9 +158,9 @@ for k in featuredic:
 	temp = list()
 	for i in range(yearbin):
 		temp.append(0)
-	for i in range(yearbin-1):
-		yearnum.append(76-i)
-	yearnum = [70, 60, 50, 45, 40, 35, 30, 27, 24, 21, 18, 15, 13, 11, 10, 9, 8, 7, 6]
+	#for i in range(yearbin-1):
+	#	yearnum.append(76-i)
+	#yearnum = [70, 60, 50, 45, 40, 35, 30, 27, 24, 21, 18, 15, 13, 11, 10, 9, 8, 7, 6]
 	for item in paperdic[k]:
 
 		if publicdic.has_key(item):
