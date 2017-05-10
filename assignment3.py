@@ -213,12 +213,12 @@ for k in featuredic:
 	binunit = maxnum / (binnum - 2)
 	binsize = list()
 	for i in range(binnum - 2):
-		binsize.append(maxnum * (i + 1))
+		binsize.append(binunit * (i + 1))
 	maxnum = 1000
 	binunit = maxnum / (binnum - 2)
 	papersize = list()
 	for i in range(binnum - 2):
-		papersize.append(maxnum * (i + 1))
+		papersize.append(binunit * (i + 1))
 	for item in paperdic[k]:
 		if not influencedic.has_key(item):
 			temp[0] += 1
