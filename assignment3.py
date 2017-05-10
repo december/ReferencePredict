@@ -347,6 +347,7 @@ ltrain = np.array(ltrain)
 #clf = sklearn.svm.SVC()
 #clf = sklearn.linear_model.LinearRegression()
 #clf = sklearn.neural_network.MLPRegressor(hidden_layer_sizes=(neuron, neuron, neuron), learning_rate='invscaling')
+'''
 clf = sklearn.ensemble.GradientBoostingRegressor()
 param_grid = {'n_estimators':range(20,81,10), 
               'learning_rate': [0.2,0.1, 0.05, 0.02, 0.01 ], 
@@ -355,7 +356,8 @@ param_grid = {'n_estimators':range(20,81,10),
               'max_features': [0.8,0.5,0.3, 0.1]} 
 estimator = sklearn.model_selection.GridSearchCV(clf, param_grid)
 estimator.fit(ftrain, ltrain)
-clf = sklearn.ensemble.GradientBoostingRegressor(estimator.best_params_)
+'''
+clf = sklearn.ensemble.GradientBoostingRegressor(learning_rate=0.1,max_depth=6,max_features=0.5,min_samples_leaf=14,n_estimators=7)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
