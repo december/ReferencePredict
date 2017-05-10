@@ -4,6 +4,7 @@ import sklearn.svm
 import sklearn.ensemble 
 import sklearn.model_selection
 import cPickle
+import math
 import numpy as np
 
 iddic = {} #author name to id
@@ -148,7 +149,7 @@ cPickle.dump(alllist, fw)
 fw.close()
 '''
 
-binnum = 11
+binnum = 102
 for k in featuredic:
 	featuredic[k].append(timesdic[k])
 	newdic = {} #conference name to public times
@@ -202,15 +203,26 @@ for k in featuredic:
 	temp = list()
 	for i in range(binnum):
 		temp.append(0)
-	binsize = [0, 5, 10, 20, 50, 100, 200, 300, 500, 1000]
-	papersize = [0, 5, 10, 20, 50, 100, 150, 200, 300, 500]
+	#binsize = [0, 5, 10, 20, 50, 100, 200, 300, 500, 1000]
+	#papersize = [0, 5, 10, 20, 50, 100, 150, 200, 300, 500]
+	origin = 0
+	maxnum = 100000
+	binunit = maxnum / (binnum - 2)
+	binsize = list()
+	for i in range(binnum - 2):
+		binsize.append(maxnum * (i + 1))
+	maxnum = 1000
+	binunit = maxnum / (binnum - 2)
+	papersize = list()
+	for i in range(binnum - 2):
+		papersize.append(maxnum * (i + 1))
 	for item in paperdic[k]:
 		if not influencedic.has_key(item):
 			temp[0] += 1
 			continue
-		for i in range(binnum-1):
+		for i in range(binnum-2):
 			if influencedic[item] <= binsize[i]:
-				temp[i] += 1
+				temp[i+1] += 1
 				break
 		if influencedic[item] > binsize[-1]:
 			temp[binnum-1] += 1
@@ -232,16 +244,22 @@ for k in featuredic:
 		temp2.append(0)
 	if len(coauthordic) != 0:
 		for item in coauthordic:
-			for i in range(binnum-1):
+			if timesdic[item] == 0:
+				temp1[0] += coauthordic[item]
+				continue
+			for i in range(binnum-2):
 				if timesdic[item] <= binsize[i]:
-					temp1[i] += coauthordic[item]
+					temp1[i+1] += coauthordic[item]
 					break
 			if timesdic[item] > binsize[-1]:
 				temp1[binnum-1] += coauthordic[item]
 		for item in coauthordic:
-			for i in range(binnum-1):
+			if len(paperdic[item]) == 0:
+				temp2[0] += coauthordic[item]
+				continue
+			for i in range(binnum-2):
 				if len(paperdic[item]) <= papersize[i]:
-					temp2[i] += coauthordic[item]
+					temp2[i+1] += coauthordic[item]
 					break
 			if len(paperdic[item]) > papersize[-1]:
 				temp2[binnum-1] += coauthordic[item]
@@ -266,18 +284,24 @@ for k in featuredic:
 		referingtimes = 0
 		for item in referingdic[k]:
 			referingtimes += referingdic[k][item]
-			for i in range(binnum-1):
+			if timesdic[item] == 0:
+				temp1[0] += referingdic[k][item]
+				continue
+			for i in range(binnum-2):
 				if timesdic[item] <= binsize[i]:
-					temp1[i] += referingdic[k][item]
+					temp1[i+1] += referingdic[k][item]
 					break
 			if timesdic[item] > binsize[-1]:
 				temp1[binnum-1] += referingdic[k][item]
 
 		featuredic[k].append(referingtimes)
 		for item in referingdic[k]:
-			for i in range(binnum-1):
+			if len(paperdic[item]) == 0:
+				temp2[0] += referingdic[k][item]
+				continue
+			for i in range(binnum-2):
 				if len(paperdic[item]) <= papersize[i]:
-					temp2[i] += referingdic[k][item]
+					temp2[i+1] += referingdic[k][item]
 					break
 			if len(paperdic[item]) > papersize[-1]:
 				temp2[binnum-1] += referingdic[k][item]
@@ -296,17 +320,23 @@ for k in featuredic:
 
 	if referreddic.has_key(k):
 		for item in referreddic[k]:
-			for i in range(binnum-1):
+			if timesdic[item] == 0:
+				temp1[0] += referreddic[k][item]
+				continue
+			for i in range(binnum-2):
 				if timesdic[item] <= binsize[i]:
-					temp1[i] += referreddic[k][item]
+					temp1[i+1] += referreddic[k][item]
 					break
 			if timesdic[item] > binsize[-1]:
 				temp1[binnum-1] += referreddic[k][item]
 
 		for item in referreddic[k]:
-			for i in range(binnum-1):
+			if len(paperdic[item]) == 0:
+				temp2[0] += referreddic[k][item]
+				continue
+			for i in range(binnum-2):
 				if len(paperdic[item]) <= papersize[i]:
-					temp2[i] += referreddic[k][item]
+					temp2[i+1] += referreddic[k][item]
 					break
 			if len(paperdic[item]) > papersize[-1]:
 				temp2[binnum-1] += referreddic[k][item]
@@ -357,7 +387,7 @@ param_grid = {'n_estimators':range(20,81,10),
 estimator = sklearn.model_selection.GridSearchCV(clf, param_grid)
 estimator.fit(ftrain, ltrain)
 '''
-clf = sklearn.ensemble.GradientBoostingRegressor(n_estimators=300)
+clf = sklearn.ensemble.GradientBoostingRegressor()
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
