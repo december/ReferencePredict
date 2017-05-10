@@ -150,11 +150,15 @@ fw.close()
 '''
 
 binnum = 102
+yearbin = 20
 for k in featuredic:
 	featuredic[k].append(timesdic[k])
 	newdic = {} #conference name to public times
 	coauthordic = {} #author name to coauthor times
-	temp = [0, 0, 0, 0, 0]
+	temp = list()
+	for i in range(yearbin):
+		temp.append(0)
+	yearnum = [70, 60, 50, 45, 40, 35, 30, 27, 24, 21, 18, 15, 13, 11, 10, 9, 8, 7, 6]
 	for item in paperdic[k]:
 
 		if publicdic.has_key(item):
@@ -171,19 +175,12 @@ for k in featuredic:
 				else:
 					coauthordic[name] = 1
 
-		if yeardic[item] >= 30:
-			temp[0] += 1
-			continue
-		if yeardic[item] >= 20:
-			temp[1] += 1
-			continue
-		if yeardic[item] >= 15:
-			temp[2] += 1
-			continue
-		if yeardic[item] >= 10:
-			temp[3] += 1
-			continue
-		temp[4] += 1
+		for i in range(yearbin-1):
+			if yeardic[item] >= yearnum[i]:
+				temp[i] += 1
+				break
+		if yeardic[item] < yearnum[-1]:
+			temp[-1] += 1
 		
 	#if len(paperdic[k]) > 0:
 	#	s = s * 1.0 / len(paperdic[k])
@@ -206,12 +203,12 @@ for k in featuredic:
 	#binsize = [0, 5, 10, 20, 50, 100, 200, 300, 500, 1000]
 	#papersize = [0, 5, 10, 20, 50, 100, 150, 200, 300, 500]
 	origin = 0
-	maxnum = 100000
+	maxnum = math.log(100000)
 	binunit = maxnum / (binnum - 2)
 	binsize = list()
 	for i in range(binnum - 2):
 		binsize.append(maxnum * (i + 1))
-	maxnum = 1000
+	maxnum = math.log(1000)
 	binunit = maxnum / (binnum - 2)
 	papersize = list()
 	for i in range(binnum - 2):
@@ -221,10 +218,10 @@ for k in featuredic:
 			temp[0] += 1
 			continue
 		for i in range(binnum-2):
-			if influencedic[item] <= binsize[i]:
+			if math.log(influencedic[item]) <= binsize[i]:
 				temp[i+1] += 1
 				break
-		if influencedic[item] > binsize[-1]:
+		if math.log(influencedic[item]) > binsize[-1]:
 			temp[binnum-1] += 1
 	s = sum(temp)
 	if s > 0:
@@ -248,20 +245,20 @@ for k in featuredic:
 				temp1[0] += coauthordic[item]
 				continue
 			for i in range(binnum-2):
-				if timesdic[item] <= binsize[i]:
+				if math.log(timesdic[item]) <= binsize[i]:
 					temp1[i+1] += coauthordic[item]
 					break
-			if timesdic[item] > binsize[-1]:
+			if math.log(timesdic[item]) > binsize[-1]:
 				temp1[binnum-1] += coauthordic[item]
 		for item in coauthordic:
 			if len(paperdic[item]) == 0:
 				temp2[0] += coauthordic[item]
 				continue
 			for i in range(binnum-2):
-				if len(paperdic[item]) <= papersize[i]:
+				if math.log(len(paperdic[item])) <= papersize[i]:
 					temp2[i+1] += coauthordic[item]
 					break
-			if len(paperdic[item]) > papersize[-1]:
+			if math.log(len(paperdic[item])) > papersize[-1]:
 				temp2[binnum-1] += coauthordic[item]
 	s = sum(temp1)
 	if s > 0:
@@ -288,10 +285,10 @@ for k in featuredic:
 				temp1[0] += referingdic[k][item]
 				continue
 			for i in range(binnum-2):
-				if timesdic[item] <= binsize[i]:
+				if math.log(timesdic[item]) <= binsize[i]:
 					temp1[i+1] += referingdic[k][item]
 					break
-			if timesdic[item] > binsize[-1]:
+			if math.log(timesdic[item]) > binsize[-1]:
 				temp1[binnum-1] += referingdic[k][item]
 
 		featuredic[k].append(referingtimes)
@@ -300,10 +297,10 @@ for k in featuredic:
 				temp2[0] += referingdic[k][item]
 				continue
 			for i in range(binnum-2):
-				if len(paperdic[item]) <= papersize[i]:
+				if math.log(len(paperdic[item])) <= papersize[i]:
 					temp2[i+1] += referingdic[k][item]
 					break
-			if len(paperdic[item]) > papersize[-1]:
+			if math.log(len(paperdic[item])) > papersize[-1]:
 				temp2[binnum-1] += referingdic[k][item]
 
 		#featuredic[k].append(timesdic[max(referingdic[k].items(), key=lambda x: x[1])[0]])
@@ -387,7 +384,7 @@ param_grid = {'n_estimators':range(20,81,10),
 estimator = sklearn.model_selection.GridSearchCV(clf, param_grid)
 estimator.fit(ftrain, ltrain)
 '''
-clf = sklearn.ensemble.GradientBoostingRegressor(n_estimators=200)
+clf = sklearn.ensemble.GradientBoostingRegressor()
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
