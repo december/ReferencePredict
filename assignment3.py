@@ -150,7 +150,7 @@ fw.close()
 '''
 
 binnum = 102
-yearbin = 20
+yearbin = 73
 for k in featuredic:
 	featuredic[k].append(timesdic[k])
 	newdic = {} #conference name to public times
@@ -158,6 +158,8 @@ for k in featuredic:
 	temp = list()
 	for i in range(yearbin):
 		temp.append(0)
+	for i in range(yearbin-1):
+		yearnum.append(76-i)
 	yearnum = [70, 60, 50, 45, 40, 35, 30, 27, 24, 21, 18, 15, 13, 11, 10, 9, 8, 7, 6]
 	for item in paperdic[k]:
 
@@ -174,14 +176,18 @@ for k in featuredic:
 					coauthordic[name] += 1
 				else:
 					coauthordic[name] = 1
-
+		if yeardic[item] > 76:
+			temp[-1] += 1
+		else:
+			temp[yeardic[item]-5] += 1
+		'''
 		for i in range(yearbin-1):
 			if yeardic[item] >= yearnum[i]:
 				temp[i] += 1
 				break
 		if yeardic[item] < yearnum[-1]:
 			temp[-1] += 1
-		
+		'''
 	#if len(paperdic[k]) > 0:
 	#	s = s * 1.0 / len(paperdic[k])
 	#featuredic[k].append(s)
