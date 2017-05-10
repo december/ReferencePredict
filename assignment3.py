@@ -209,12 +209,12 @@ for k in featuredic:
 	#binsize = [0, 5, 10, 20, 50, 100, 200, 300, 500, 1000]
 	#papersize = [0, 5, 10, 20, 50, 100, 150, 200, 300, 500]
 	origin = 0
-	maxnum = math.log(100000)
+	maxnum = 100000
 	binunit = maxnum / (binnum - 2)
 	binsize = list()
 	for i in range(binnum - 2):
 		binsize.append(binunit * (i + 1))
-	maxnum = math.log(1000)
+	maxnum = 1000
 	binunit = maxnum / (binnum - 2)
 	papersize = list()
 	for i in range(binnum - 2):
@@ -224,10 +224,10 @@ for k in featuredic:
 			temp[0] += 1
 			continue
 		for i in range(binnum-2):
-			if math.log(influencedic[item]) <= binsize[i]:
+			if influencedic[item] <= binsize[i]:
 				temp[i+1] += 1
 				break
-		if math.log(influencedic[item]) > binsize[-1]:
+		if influencedic[item] > binsize[-1]:
 			temp[binnum-1] += 1
 	s = sum(temp)
 	if s > 0:
@@ -251,20 +251,20 @@ for k in featuredic:
 				temp1[0] += coauthordic[item]
 				continue
 			for i in range(binnum-2):
-				if math.log(timesdic[item]) <= binsize[i]:
+				if timesdic[item] <= binsize[i]:
 					temp1[i+1] += coauthordic[item]
 					break
-			if math.log(timesdic[item]) > binsize[-1]:
+			if timesdic[item] > binsize[-1]:
 				temp1[binnum-1] += coauthordic[item]
 		for item in coauthordic:
 			if len(paperdic[item]) == 0:
 				temp2[0] += coauthordic[item]
 				continue
 			for i in range(binnum-2):
-				if math.log(len(paperdic[item])) <= papersize[i]:
+				if len(paperdic[item]) <= papersize[i]:
 					temp2[i+1] += coauthordic[item]
 					break
-			if math.log(len(paperdic[item])) > papersize[-1]:
+			if len(paperdic[item]) > papersize[-1]:
 				temp2[binnum-1] += coauthordic[item]
 	s = sum(temp1)
 	if s > 0:
@@ -291,10 +291,10 @@ for k in featuredic:
 				temp1[0] += referingdic[k][item]
 				continue
 			for i in range(binnum-2):
-				if math.log(timesdic[item]) <= binsize[i]:
+				if timesdic[item] <= binsize[i]:
 					temp1[i+1] += referingdic[k][item]
 					break
-			if math.log(timesdic[item]) > binsize[-1]:
+			if timesdic[item] > binsize[-1]:
 				temp1[binnum-1] += referingdic[k][item]
 
 		featuredic[k].append(referingtimes)
@@ -303,10 +303,10 @@ for k in featuredic:
 				temp2[0] += referingdic[k][item]
 				continue
 			for i in range(binnum-2):
-				if math.log(len(paperdic[item])) <= papersize[i]:
+				if len(paperdic[item]) <= papersize[i]:
 					temp2[i+1] += referingdic[k][item]
 					break
-			if math.log(len(paperdic[item])) > papersize[-1]:
+			if len(paperdic[item]) > papersize[-1]:
 				temp2[binnum-1] += referingdic[k][item]
 
 		#featuredic[k].append(timesdic[max(referingdic[k].items(), key=lambda x: x[1])[0]])
@@ -327,10 +327,10 @@ for k in featuredic:
 				temp1[0] += referreddic[k][item]
 				continue
 			for i in range(binnum-2):
-				if math.log(timesdic[item]) <= binsize[i]:
+				if timesdic[item] <= binsize[i]:
 					temp1[i+1] += referreddic[k][item]
 					break
-			if math.log(timesdic[item]) > binsize[-1]:
+			if timesdic[item] > binsize[-1]:
 				temp1[binnum-1] += referreddic[k][item]
 
 		for item in referreddic[k]:
@@ -338,10 +338,10 @@ for k in featuredic:
 				temp2[0] += referreddic[k][item]
 				continue
 			for i in range(binnum-2):
-				if math.log(len(paperdic[item])) <= papersize[i]:
+				if len(paperdic[item]) <= papersize[i]:
 					temp2[i+1] += referreddic[k][item]
 					break
-			if math.log(len(paperdic[item])) > papersize[-1]:
+			if len(paperdic[item]) > papersize[-1]:
 				temp2[binnum-1] += referreddic[k][item]
 
 		#featuredic[k].append(timesdic[max(referreddic[k].items(), key=lambda x: x[1])[0]])
@@ -390,7 +390,7 @@ param_grid = {'n_estimators':range(20,81,10),
 estimator = sklearn.model_selection.GridSearchCV(clf, param_grid)
 estimator.fit(ftrain, ltrain)
 '''
-clf = sklearn.ensemble.GradientBoostingRegressor(max_depth=6,max_features=0.5)
+clf = sklearn.ensemble.GradientBoostingRegressor(n_estimators=300)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
