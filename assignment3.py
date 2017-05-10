@@ -357,7 +357,7 @@ param_grid = {'n_estimators':range(20,81,10),
 estimator = sklearn.model_selection.GridSearchCV(clf, param_grid)
 estimator.fit(ftrain, ltrain)
 '''
-clf = sklearn.ensemble.GradientBoostingRegressor(learning_rate=0.1,max_depth=6,max_features=0.5,min_samples_leaf=14,n_estimators=7)
+clf = sklearn.ensemble.GradientBoostingRegressor(max_depth=6,max_features=0.5,n_estimators=1000)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
