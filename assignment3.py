@@ -224,10 +224,10 @@ for k in featuredic:
 			temp[0] += 1
 			continue
 		for i in range(binnum-2):
-			if influencedic[item] <= binsize[i]:
+			if math.log(influencedic[item]) <= binsize[i]:
 				temp[i+1] += 1
 				break
-		if influencedic[item] > binsize[-1]:
+		if math.log(influencedic[item]) > binsize[-1]:
 			temp[binnum-1] += 1
 	s = sum(temp)
 	if s > 0:
