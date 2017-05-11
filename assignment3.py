@@ -149,7 +149,7 @@ cPickle.dump(alllist, fw)
 fw.close()
 '''
 
-binnum = 102
+binnum = 202
 yearbin = 73
 for k in featuredic:
 	featuredic[k].append(timesdic[k])
@@ -390,7 +390,7 @@ param_grid = {'n_estimators':range(20,81,10),
 estimator = sklearn.model_selection.GridSearchCV(clf, param_grid)
 estimator.fit(ftrain, ltrain)
 '''
-clf = sklearn.ensemble.GradientBoostingRegressor(n_estimators=500)
+clf = sklearn.ensemble.GradientBoostingRegressor(n_estimators=300)
 clf.fit(ftrain, ltrain)
 
 print 'Training model finished.'
